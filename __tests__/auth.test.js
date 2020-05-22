@@ -1,6 +1,7 @@
 const supertest = require('supertest')
 const server = require('../api/server')
 const db = require('../database/dbConfig')
+const token = require('../auth/generateToken')
 
 beforeEach(() => {
     return db.migrate.rollback()
@@ -76,12 +77,13 @@ describe('JOKES', ()=> {
                 return supertest(server)
                 .post('/api/auth/login')
                 .send({username: "Mary_Poppins", password: "Supercalifragilistic"})
-                .then(() => {
+                .then(res => {
                     return supertest(server)
                     .get('/api/jokes')
+                    .set('authorization', token)
                     .then(res => {
                         console.log(res)
-                        // expect(Array.isArray(res.data)).toBe(true)
+                        expect(Array.isArray(res.data)).toBe(true)
                     })
                 })
             })
