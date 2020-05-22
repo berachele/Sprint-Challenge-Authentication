@@ -2,11 +2,11 @@ const supertest = require('supertest')
 const server = require('../api/server')
 const db = require('../database/dbConfig')
 
-beforeEach(() => {
-    return db.migrate.rollback()
-    .then(()=>db.migrate.latest())
-    // .then(()=>db.seed.run())
-})
+// beforeEach(() => {
+//     return db.migrate.rollback()
+//     .then(()=>db.migrate.latest())
+//     // .then(()=>db.seed.run())
+// })
 
 describe('AUTH', () => {
     it('can run the test', () => {
@@ -14,14 +14,14 @@ describe('AUTH', () => {
     })
 
     describe('/REGISTER', () => {
-        it('should add a new user, 201 status', () => {
-            return supertest(server)
-            .post('/api/auth/register')
-            .send({username: "Mary_Poppins", password: "Supercalifragilistic"})
-            .then(response => {
-                expect(response.status).toEqual(201)
-            })
-        })
+        // it('should add a new user, 201 status', () => {
+        //     return supertest(server)
+        //     .post('/api/auth/register')
+        //     .send({username: "Mary_Poppins", password: "Supercalifragilistic"})
+        //     .then(response => {
+        //         expect(response.status).toEqual(201)
+        //     })
+        // })
         it('should return that user (as an array of 1)', () => {
             return supertest(server)
             .post('/api/auth/register')
@@ -33,7 +33,21 @@ describe('AUTH', () => {
     })
 
     describe('/LOGIN', ()=> {
-        it.todo('can login successfully, 200 status')
-        it.todo('can see the `Welcome, <username>` string')
+        it('can login successfully, 200 status', () => {
+            return supertest(server)
+            .post('/api/auth/login')
+            .send({username: "Mary_Poppins", password: "Supercalifragilistic"})
+            .then(response => {
+                expect(response.status).toEqual(200)
+            })
+        })
+        it('can see the `Welcome, <username>` string', () => {
+            return supertest(server)
+            .post('/api/auth/login')
+            .send({username: "Mary_Poppins", password: "Supercalifragilistic"})
+            .then(response => {
+                expect(response.body.message).toEqual("Welcome, Mary_Poppins")
+            })
+        })
     })
 })
