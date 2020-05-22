@@ -22,7 +22,14 @@ describe('AUTH', () => {
                 expect(response.status).toEqual(201)
             })
         })
-        it.todo('should return that user (as an array of 1)')
+        it('should return that user (as an array of 1)', () => {
+            return supertest(server)
+            .post('/api/auth/register')
+            .send({username: "Mary_Poppins", password: "Supercalifragilistic"})
+            .then(response => {
+                expect(Array.isArray).toHaveLength(1)
+            })
+        })
     })
 
     describe('/LOGIN', ()=> {
