@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
     jwt.verify(token, secret, (err, decodedPayload) => {
       if(err){
         res.status(401).json({
-          message: "Ivalid credentials."
+          message: "Invalid credentials."
         })
       }else{
         next()
