@@ -1,8 +1,22 @@
-/* 
-  complete the middleware code to check if the user is logged in
-  before granting access to the next middleware/route handler
-*/
+const jwt = require('jsonwebtoken')
+const configVars = require('../config/vars')
 
 module.exports = (req, res, next) => {
-  res.status(401).json({ you: 'shall not pass!' });
+  const token = req.cookies.token
+
+  if(token){
+    const secret = configVars.jwtSecret
+
+    jwt.verify(token, secret, (err, decodedPayload) => {
+      if(err){
+        res.status(401).json({
+          message: "Invalid credentials."
+        })
+      }else{
+        next()
+      }
+    })
+  }else{
+    res.status(401).json({ you: 'shall not pass!' });
+  }
 };
